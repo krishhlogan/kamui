@@ -1,9 +1,10 @@
-from django.shortcuts import render
+
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
 import ipfshttpclient
 from .models import  *
+
 # Create your views here.
 
 
@@ -17,7 +18,6 @@ def store_file(request):
             myfile.name = request.FILES['file'].name
             api = ipfshttpclient.connect()
             res = api.add(request.FILES['file'])
-            print(res.as_json())
             myfile.ipfs_hash = res.as_json()
             myfile.save()
             return Response({'status':'success','error_code':'KM00','resp':res})
