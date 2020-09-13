@@ -13,7 +13,7 @@ services:
 
   ipfs:
     image: ipfs/go-ipfs:latest
-    hostname: ipfs_host1
+    hostname: 127.0.0.1
     volumes:
       - "./export:/export"
       - "./data/ipfs:/data/ipfs"
