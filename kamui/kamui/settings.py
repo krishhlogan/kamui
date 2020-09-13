@@ -131,10 +131,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-DEFAULT_FILE_STORAGE = 'ipfs_storage.InterPlanetaryFileSystemStorage'
-
-IPFS_STORAGE_API_URL = 'http://localhost:5001/api/v0/'
-IPFS_STORAGE_GATEWAY_URL = 'http://localhost:8080/ipfs/'
 
 
 STATIC_URL = '/static/'
