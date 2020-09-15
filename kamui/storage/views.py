@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated
 import ipfshttpclient
 from .models import  *
+import  os
 
 # Create your views here.
 
@@ -16,7 +17,9 @@ def store_file(request):
             print(request.FILES)
             myfile = IPFSFile()
             myfile.name = request.FILES['file'].name
-            api = ipfshttpclient.connect()
+            # api = ipfshttpclient.connect()
+            url = os.environ['URL']
+            api = ipfshttpclient.connect(addr='/dns/'+url+'/tcp/5001')
             res = api.add(request.FILES['file'])
             myfile.ipfs_hash = res.as_json()
             myfile.save()
