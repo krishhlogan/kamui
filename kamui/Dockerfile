@@ -1,17 +1,54 @@
-# pull official base image
-FROM python:3.7.6-alpine
+## pull official base image
+#FROM python:3.7.6-alpine
+#
+## set work directory
+#
+#WORKDIR /usr/src/app
+#
+#
+## set environment variables
+#ENV PYTHONDONTWRITEBYTECODE 1
+#ENV PYTHONUNBUFFERED 1
+#
+## install dependencies
+#RUN pip install --upgrade pip
+#COPY ./requirements.txt .
+#RUN pip install -r requirements.txt
+#
+## copy project
+#COPY . .
+#
+#
+# Base Image
+FROM python:3.6
 
-# set work directory
-WORKDIR /usr/src/app
+# create and set working directory
+RUN mkdir /app
+WORKDIR /app
 
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
+# Add current directory code to working directory
+ADD . /app/
+
+# set default environment variables
 ENV PYTHONUNBUFFERED 1
+ENV LANG C.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
 
-# install dependencies
-RUN pip install --upgrade pip
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+# set project environment variables
+# grab these via the Python os.environ
+# these are 100% optional here
+# $PORT is set by Heroku
+ENV PORT=8000
+ENV SECRET="dn&f94+u5#@3pap&72w&yfo-9)p^2&(nnzd!skmf1xtuz-9pj*"
+#RUN apt-get install golang-go -y
 
-# copy project
-COPY . .
+# install environment dependencies
+RUN pip3 install --upgrade pip
+
+# Install project dependencies
+RUN pip3 install -r requirements.txt
+
+# Expose is NOT supported by Heroku
+# EXPOSE 8888
+
+CMD gunicorn kamui.wsgi:application --bind 0.0.0.0:$PORT
