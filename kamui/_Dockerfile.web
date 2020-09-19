@@ -39,10 +39,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # these are 100% optional here
 # $PORT is set by Heroku
 ENV PORT=8000
-ENV URL=kamui-files.herokuapp.com
-ENV SECRET=dn&f94+u5#@3pap&72w&yfo-9)p^2&(nnzd!skmf1xtuz-9pj*
-ENV URL=ipfs.infura.io
-ENV IPFS_GATEWAY=https://gateway.ipfs.io/ipfs
+ENV URL=127.0.0.1
 #ENV SECRET="dn&f94+u5#@3pap&72w&yfo-9)p^2&(nnzd!skmf1xtuz-9pj*"
 #RUN apt-get install golang-go -y
 
@@ -54,4 +51,5 @@ RUN pip3 install -r requirements.txt
 
 # Expose is NOT supported by Heroku
 # EXPOSE 8888
+
 CMD gunicorn kamui.wsgi:application --bind 0.0.0.0:$PORT

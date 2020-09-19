@@ -5,6 +5,8 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV API_PORT 5001
 ENV GATEWAY_PORT 8080
 ENV SWARM_PORT 4001
+ENV URL kamui-files.herokuapp.com
+
 
 EXPOSE ${SWARM_PORT}
 # This may introduce security risk to expose API_PORT public
@@ -15,16 +17,25 @@ EXPOSE ${GATEWAY_PORT}
 #RUN go get -u github.com/ipfs/ipfs-update \
 #    && ipfs-update install latest \
 #    && ipfs init
+
+
 RUN git clone https://github.com/ipfs/go-ipfs.git
 RUN cd go-ipfs && make install
+
 RUN ipfs init
 
 # config the api endpoint, may introduce security risk to expose API_PORT public
-RUN ipfs config Addresses.API /ip4/0.0.0.0/tcp/${API_PORT}
+RUN ipfs config Addresses.API /ip4/{$URL}/tcp/${API_PORT}
 
 # config the gateway endpoint
-RUN ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/${GATEWAY_PORT}
+RUN ipfs config Addresses.Gateway /ip4/{$URL}/tcp/${GATEWAY_PORT}
+RUN mkdir /scripts/
+RUN echo "ipfs init && ipfs daemon" >> /scripts/run.sh
+RUN chmod +x /scripts/run.sh
 
 # by default, run `ipfs daemon` to start as a running node
-ENTRYPOINT ["ipfs"]
-CMD ["daemon"]
+ENTRYPOINT ["/scripts/run.sh"]
+#CMD ["daemon"]
+#CMD ["init"]
+#RUN daemon
+

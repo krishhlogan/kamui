@@ -13,7 +13,8 @@ services:
 
   api:
     build: ./
-    command: python manage.py runserver 0.0.0.0:8000
+    environment: ["PORT:8000"]
+    command: gunicorn kamui.wsgi:application --bind 0.0.0.0:$PORT
     volumes:
       - ./:/usr/src/app/
     ports:
